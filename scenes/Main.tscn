@@ -1,10 +1,11 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://scripts/player.gd" type="Script" id=1]
 [ext_resource path="res://sprites/cursor.png" type="Texture" id=2]
 [ext_resource path="res://scripts/center.gd" type="Script" id=3]
 [ext_resource path="res://scripts/interact_button.gd" type="Script" id=4]
 [ext_resource path="res://scripts/npc.gd" type="Script" id=5]
+[ext_resource path="res://scenes/CoffeeMachine.tscn" type="PackedScene" id=6]
 
 [sub_resource type="PlaneMesh" id=1]
 size = Vector2( 20, 20 )
@@ -91,3 +92,6 @@ script = ExtResource( 5 )
 
 [node name="CollisionShape" type="CollisionShape" parent="NPC/StaticBody"]
 shape = SubResource( 6 )
+
+[node name="CoffeeMachine" parent="." instance=ExtResource( 6 )]
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -7.18579, 2.28958, 0 )

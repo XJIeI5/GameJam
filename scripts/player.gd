@@ -93,8 +93,10 @@ func onDialogStop():
 	letEmMove()
 
 func disable():
+	print("DISABLE")
 	velocity = Vector3()
 	state = State.Interact
 
 func letEmMove():
+	print("LET EM MOVE")
 	state = State.Move
