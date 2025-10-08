@@ -8,7 +8,7 @@ signal CanInteractStop
 signal DialogStart
 signal DialogStop
 
-const SPEED := 5.0
+export var SPEED := 5.0
 const JUMP_VELOCITY := 4.5
 const GRAVITY: Vector3 = Vector3(0, -9.8, 0)
 
@@ -25,7 +25,7 @@ var state = State.Move
 
 onready var neck = $Neck
 onready var camera = $Neck/Camera
-onready var raycast = $Neck/RayCast
+onready var raycast = $Neck/Camera/RayCast
 onready var interactLabel = $Neck/Camera/InteractLabel/Label
 
 func _ready():
@@ -74,6 +74,10 @@ func handleMovement():
 
 func handleInteract():
 	if not raycast.is_colliding():
+		if onCanInteract:
+			emit_signal("CanInteractStop")
+		return
+	if raycast.get_collider().collision_layer & 0b10:
 		if onCanInteract:
 			emit_signal("CanInteractStop")
 		return

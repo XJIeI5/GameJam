@@ -1,0 +1,20 @@
+[remap]
+
+importer="wavefront_obj"
+type="Mesh"
+path="res://.import/stoika.obj-17e29a404bdb2bd5a7b0439e00705aba.mesh"
+
+[deps]
+
+files=[ "res://.import/stoika.obj-17e29a404bdb2bd5a7b0439e00705aba.mesh" ]
+
+source_file="res://stoika.obj"
+dest_files=[ "res://.import/stoika.obj-17e29a404bdb2bd5a7b0439e00705aba.mesh", "res://.import/stoika.obj-17e29a404bdb2bd5a7b0439e00705aba.mesh" ]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3( 1, 1, 1 )
+offset_mesh=Vector3( 0, 0, 0 )
+octahedral_compression=true
+optimize_mesh_flags=4286
