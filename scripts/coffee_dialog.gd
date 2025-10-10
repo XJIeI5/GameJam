@@ -1,8 +1,9 @@
 extends StaticBody
 
-
+# TODO: get rid of code duplication (look_at.gd)
 
 onready var camera: Camera = $"../Camera"
+onready var machine: Spatial = owner
 
 var onInteraction := false
 var caller: Object
@@ -28,7 +29,10 @@ func _process(_delta: float):
 func setOnInteraction(caller: Object):
 	self.caller = caller
 	onInteraction = true
+	if Hand.CarriedItem is Coffee.Cup:
+		machine.cup = Hand.CarriedItem as Coffee.Cup
 
 func setOffInteraction():
 	onInteraction = false
 	self.caller = null
+	machine.cup = null

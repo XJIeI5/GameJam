@@ -84,6 +84,11 @@ config/name="game-jam"
 run/main_scene="res://scenes/Main.tscn"
 config/icon="res://icon.png"
 
+[autoload]
+
+Coffee="*res://scripts/coffee_ingredients.gd"
+Hand="*res://scripts/hand.gd"
+
 [editor_plugins]
 
 enabled=PoolStringArray( "res://addons/dialogic/plugin.cfg" )

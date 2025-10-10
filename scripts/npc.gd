@@ -1,7 +1,7 @@
 extends StaticBody
 
 func InteractWith(caller: Object):
-	caller.emit_signal("DialogStart")
+	caller.emit_signal("DialogStart", self)
 	
 	var dialog = Dialogic.start('Test')
 	dialog.connect("dialogic_signal", self, "onExit", [caller])

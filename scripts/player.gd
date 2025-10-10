@@ -5,10 +5,10 @@ var onCanInteract := false
 signal CanInteractStart
 signal CanInteractStop
 
-signal DialogStart
+signal DialogStart(starter)
 signal DialogStop
 
-export var SPEED := 5.0
+export var SPEED := 8.0
 const JUMP_VELOCITY := 4.5
 const GRAVITY: Vector3 = Vector3(0, -9.8, 0)
 
@@ -34,10 +34,10 @@ func _ready():
 	connect("DialogStop", self, "onDialogStop")
 
 func _input(event: InputEvent) -> void:
-	if event is InputEventMouseButton:
-		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+#	if event is InputEventMouseButton:
+#		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	if event.is_action("ui_cancel"):
-		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+		get_tree().quit()
 	
 	if state == State.Move:
 		handleRotation(event)
@@ -90,10 +90,11 @@ func handleInteract():
 	raycast.get_collider().InteractWith(self)
 	emit_signal("CanInteractStop")
 	
-func onDialogStart():
+func onDialogStart(starter: Object):
 	disable()
 
 func onDialogStop():
+	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	letEmMove()
 
 func disable():
