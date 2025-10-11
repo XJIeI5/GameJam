@@ -38,20 +38,16 @@ func _input_event(camera: Object, event: InputEvent, position: Vector3, normal: 
 		emit_signal("boilingStop")
 
 func _process(delta: float):
-	handleFill()
-	handleBoiling(delta)
-
-func handleFill():
-	if Input.is_action_just_pressed("Interact") and canBeFilled:
-		remainingCoffee = maxCoffee
-
-func handleBoiling(delta: float):
 	if not onBoiling:
 		return
 	if remainingCoffee == 0:
 		return
 	readiness += boilingSpeed * delta
 
+func _input(event: InputEvent):
+	if Input.is_action_just_pressed("Interact") and canBeFilled:
+		remainingCoffee = maxCoffee
+		get_viewport().set_input_as_handled()
 
 func onMouseEntered():
 	canBeFilled = true

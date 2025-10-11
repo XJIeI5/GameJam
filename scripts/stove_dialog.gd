@@ -24,19 +24,23 @@ func InteractWith(caller: Object):
 
 
 func _process(_delta: float):
+	pass
+
+func _unhandled_input(event: InputEvent):
 	if not onInteraction:
 		return
-#	if Input.is_action_just_pressed("Interact"):
-#		self.caller.emit_signal("DialogStop", self)
-#		self.caller.camera.make_current()
-#
-#		for _cezve in Cezves:
-#			var cezve := get_node(_cezve as NodePath)
-#			cezve.get_node("CoffeeAmount").disconnectToDialog(caller)
-#			cezve.get_node("Readiness").connectToDialog(caller)
-#			cezve.get_node("FillAction").connectToDialog(caller)
-#
-#		setOffInteraction()
+	if Input.is_action_just_pressed("Interact"):
+		self.caller.emit_signal("DialogStop", self)
+		self.caller.camera.make_current()
+
+		for _cezve in Cezves:
+			var cezve := get_node(_cezve as NodePath)
+			cezve.get_node("CoffeeAmount").disconnectToDialog(caller)
+			cezve.get_node("Readiness").connectToDialog(caller)
+			cezve.get_node("FillAction").connectToDialog(caller)
+
+		setOffInteraction()
+		get_viewport().set_input_as_handled()
 
 func setOnInteraction(caller: Object):
 	self.caller = caller
