@@ -20,7 +20,7 @@ func _process(_delta: float):
 	if not onInteraction:
 		return
 	if Input.is_action_just_pressed("Interact"):
-		self.caller.emit_signal("DialogStop")
+		self.caller.emit_signal("DialogStop", self)
 		self.caller.camera.make_current()
 		
 		setOffInteraction()

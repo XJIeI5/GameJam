@@ -15,8 +15,14 @@ func _ready():
 	self.visible = false
 	yield(machine, "ready")
 	machine.connect("addIngredient", self, "onIngredientAdd")
-	machine.player.connect("DialogStart", self, "onDialogStart")
-	machine.player.connect("DialogStop", self, "onDialogStop")
+
+func connectToDialog(caller: Object):
+	caller.connect("DialogStart", self, "onDialogStart")
+	caller.connect("DialogStop", self, "onDialogStop")
+
+func disconnectToDialog(caller: Object):
+	caller.disconnect("DialogStart", self, "onDialogStart")
+	caller.disconnect("DialogStop", self, "onDialogStop")
 
 func onIngredientAdd(ingredient: Coffee.Ingredient, deltaPercent: float):
 	if machine.cup == null:
@@ -39,5 +45,5 @@ func onDialogStart(starter: Object):
 		return
 	self.visible = true
 	
-func onDialogStop():
+func onDialogStop(ender: Object):
 	self.visible = false

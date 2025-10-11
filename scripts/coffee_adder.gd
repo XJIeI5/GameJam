@@ -12,7 +12,7 @@ export (Coffee.IngredientType) var type
 
 func _input_event(camera, event, position, normal, shape_idx):
 	var mouse_click = event as InputEventMouseButton
-	if not (mouse_click and mouse_click.button_index == 1):
+	if not (mouse_click and mouse_click.button_index == BUTTON_LEFT):
 		return
 	pressed = not pressed
 	if pressed:

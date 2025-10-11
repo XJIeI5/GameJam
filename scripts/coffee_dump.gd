@@ -3,20 +3,22 @@ extends Node
 signal addLayer(ingredientType, percent)
 signal addIngredient(ingredientType, deltaPercent)
 
-export(NodePath) var playerPath
-onready var player = get_node(playerPath)
 onready var newPlayerPos: Spatial = $NewPlayerPos
 
 var storedCallerPos: Vector3
-var caller: Object
 
 var cup: Coffee.Cup
 
 func _ready():
 	connect("addLayer", self, "onAddLayer")
-	player.connect("DialogStart", self, "movePlayerAway")
-	player.connect("DialogStop", self, "bringPlayerBack")
 
+func connectToDialog(caller: Object):
+	caller.connect("DialogStart", self, "movePlayerAway")
+	caller.connect("DialogStop", self, "bringPlayerBack")
+
+func disconnectToDialog(caller: Object):
+	caller.disconnect("DialogStart", self, "movePlayerAway")
+	caller.disconnect("DialogStop", self, "bringPlayerBack")
 
 func onAddLayer(ingredient: Coffee.Ingredient, percent: float):
 	addLayer(ingredient, percent)
@@ -44,10 +46,8 @@ func printDebug():
 		print("\t%s:%s" % [layer.type, layer.percent])
 
 func movePlayerAway(caller: Object):
-	storedCallerPos = caller.translation
-	self.caller = caller
-	caller.translation = newPlayerPos.translation
-	print(caller.translation)
+	storedCallerPos = caller.global_translation
+	caller.global_translation = newPlayerPos.global_translation
 
-func bringPlayerBack():
-	caller.translation = storedCallerPos
+func bringPlayerBack(caller: Object):
+	caller.global_translation = storedCallerPos

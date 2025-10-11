@@ -10,4 +10,4 @@ func InteractWith(caller: Object):
 func onExit(string: String, caller: Object):
 	match string:
 		"exit":
-			caller.emit_signal("DialogStop")
+			caller.emit_signal("DialogStop", self)

@@ -3,12 +3,16 @@ extends StaticBody
 # TODO: get rid of code duplication (look_at.gd)
 
 onready var camera: Camera = $"../Camera"
-onready var machine: Spatial = owner
+onready var machine: Spatial = $".."
+onready var cupUI: VBoxContainer = $"../Cup"
 
 var onInteraction := false
 var caller: Object
 
 func InteractWith(caller: Object):
+	cupUI.connectToDialog(caller)
+	machine.connectToDialog(caller)
+	
 	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 	caller.emit_signal("DialogStart", self)
 	camera.make_current()
@@ -21,8 +25,11 @@ func _process(_delta: float):
 	if not onInteraction:
 		return
 	if Input.is_action_just_pressed("Interact"):
-		self.caller.emit_signal("DialogStop")
+		self.caller.emit_signal("DialogStop", self)
 		self.caller.camera.make_current()
+		
+		cupUI.disconnectToDialog(caller)
+		machine.disconnectToDialog(caller)
 		
 		setOffInteraction()
 

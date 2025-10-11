@@ -8,8 +8,7 @@ func _ready():
 	player.connect("DialogStop", self, "onDialogStop")
 	
 func onDialogStart(starter: Object):
-	print("HIDE")
 	self.visible = false
 
-func onDialogStop():
+func onDialogStop(ender: Object):
 	self.visible = true

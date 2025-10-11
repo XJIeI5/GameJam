@@ -6,7 +6,7 @@ signal CanInteractStart
 signal CanInteractStop
 
 signal DialogStart(starter)
-signal DialogStop
+signal DialogStop(ender)
 
 export var SPEED := 8.0
 const JUMP_VELOCITY := 4.5
@@ -60,7 +60,7 @@ func handleRotation(event: InputEvent):
 		camera.rotation.x = clamp(camera.rotation.x, deg2rad(-60), deg2rad(60))
 
 func handleMovement():
-	if Input.is_action_just_pressed("ui_accept") and is_on_floor():
+	if Input.is_action_just_pressed("Jump") and is_on_floor():
 		velocity.y = JUMP_VELOCITY
 	
 	var input_dir := Input.get_vector("MoveLeft", "MoveRight", "MoveForward", "MoveBackward")
@@ -93,7 +93,7 @@ func handleInteract():
 func onDialogStart(starter: Object):
 	disable()
 
-func onDialogStop():
+func onDialogStop(ender: Object):
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	letEmMove()
 

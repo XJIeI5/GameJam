@@ -1,0 +1,110 @@
+[gd_scene load_steps=13 format=2]
+
+[ext_resource path="res://scripts/stove_dialog.gd" type="Script" id=1]
+[ext_resource path="res://scripts/cezve.gd" type="Script" id=2]
+[ext_resource path="res://addons/dialogic/Documentation/Theme/DocumentationH1.tres" type="DynamicFont" id=3]
+[ext_resource path="res://scripts/cezve_amount.gd" type="Script" id=4]
+[ext_resource path="res://scripts/cezve_readiness.gd" type="Script" id=5]
+[ext_resource path="res://scripts/cezve_action.gd" type="Script" id=6]
+
+[sub_resource type="PrismMesh" id=1]
+
+[sub_resource type="ConcavePolygonShape" id=2]
+data = PoolVector3Array( 0, 1, 1, 1, -1, 1, -1, -1, 1, 0, 1, -1, -1, -1, -1, 1, -1, -1, 0, 1, 1, 0, 1, -1, 1, -1, 1, 0, 1, -1, 1, -1, -1, 1, -1, 1, 0, 1, -1, 0, 1, 1, -1, -1, -1, 0, 1, 1, -1, -1, 1, -1, -1, -1, -1, -1, 1, 1, -1, 1, -1, -1, -1, 1, -1, 1, 1, -1, -1, -1, -1, -1 )
+
+[sub_resource type="CylinderMesh" id=3]
+top_radius = 0.2
+bottom_radius = 0.2
+height = 0.3
+
+[sub_resource type="SpatialMaterial" id=4]
+albedo_color = Color( 0.2, 0.145098, 0.145098, 1 )
+
+[sub_resource type="BoxShape" id=5]
+extents = Vector3( 0.2, 0.2, 0.2 )
+
+[sub_resource type="BoxShape" id=6]
+extents = Vector3( 0.2, 0.2, 0.2 )
+
+[node name="CoffeeStove" type="Spatial"]
+
+[node name="Camera" type="Camera" parent="."]
+transform = Transform( -1, -4.46776e-14, -8.74228e-08, -8.59617e-08, 0.182064, 0.983287, 1.59165e-08, 0.983287, -0.182064, 0.0440117, 3.63894, -0.460119 )
+
+[node name="MeshInstance" type="MeshInstance" parent="."]
+transform = Transform( -1, 8.74228e-08, 0, -8.74228e-08, -1, 0, 0, 0, 1, 0, 0, 0 )
+mesh = SubResource( 1 )
+
+[node name="InteractionCollider" type="StaticBody" parent="."]
+transform = Transform( -1, 8.74228e-08, 0, -8.74228e-08, -1, 0, 0, 0, 1, 0, 0, 0 )
+collision_layer = 4
+script = ExtResource( 1 )
+Cezves = [ NodePath("../cezve1"), NodePath("../cezve3") ]
+
+[node name="CollisionShape" type="CollisionShape" parent="InteractionCollider"]
+shape = SubResource( 2 )
+
+[node name="cezve1" type="MeshInstance" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.551434, 1.14925, 0.536267 )
+mesh = SubResource( 3 )
+material/0 = SubResource( 4 )
+
+[node name="Area" type="Area" parent="cezve1"]
+collision_layer = 16
+priority = 1.0
+script = ExtResource( 2 )
+
+[node name="CollisionShape" type="CollisionShape" parent="cezve1/Area"]
+shape = SubResource( 5 )
+
+[node name="Target" type="Spatial" parent="cezve1/Area"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -1.03941, 0, -0.0773699 )
+
+[node name="FillAction" type="Label3D" parent="cezve1"]
+transform = Transform( -1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, -0.112842, -0.372878 )
+text = "E - fill"
+font = ExtResource( 3 )
+script = ExtResource( 6 )
+
+[node name="CoffeeAmount" type="Label3D" parent="cezve1"]
+transform = Transform( -1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, -0.633155, -0.112842, 0.0370208 )
+font = ExtResource( 3 )
+script = ExtResource( 4 )
+
+[node name="Readiness" type="Label3D" parent="cezve1"]
+transform = Transform( -1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0.186692, -0.0109169 )
+font = ExtResource( 3 )
+script = ExtResource( 5 )
+
+[node name="cezve3" type="MeshInstance" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.484941, 1.14925, -0.631699 )
+mesh = SubResource( 3 )
+material/0 = SubResource( 4 )
+
+[node name="Area" type="Area" parent="cezve3"]
+collision_layer = 16
+priority = 1.0
+script = ExtResource( 2 )
+
+[node name="CollisionShape" type="CollisionShape" parent="cezve3/Area"]
+transform = Transform( 1.2, 0, 0, 0, 1.2, 0, 0, 0, 1.2, 0, 0, 0 )
+shape = SubResource( 6 )
+
+[node name="Target" type="Spatial" parent="cezve3/Area"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.904349, 0, -0.0669796 )
+
+[node name="FillAction" type="Label3D" parent="cezve3"]
+transform = Transform( -1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, -0.112842, -0.372878 )
+text = "E - fill"
+font = ExtResource( 3 )
+script = ExtResource( 6 )
+
+[node name="CoffeeAmount" type="Label3D" parent="cezve3"]
+transform = Transform( -1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, -0.633155, -0.112842, 0.0370208 )
+font = ExtResource( 3 )
+script = ExtResource( 4 )
+
+[node name="Readiness" type="Label3D" parent="cezve3"]
+transform = Transform( -1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0.186692, -0.0109169 )
+font = ExtResource( 3 )
+script = ExtResource( 5 )
