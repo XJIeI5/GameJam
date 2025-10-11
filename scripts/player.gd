@@ -8,9 +8,10 @@ signal CanInteractStop
 signal DialogStart(starter)
 signal DialogStop(ender)
 
-export var SPEED := 8.0
-const JUMP_VELOCITY := 4.5
-const GRAVITY: Vector3 = Vector3(0, -9.8, 0)
+export var Speed := 8.0
+export var GravityFactor: float = 2.0
+export var JumpVelocity := 4.5
+var Gravity: Vector3 = Vector3(0, -9.8*GravityFactor, 0)
 
 var velocity: Vector3 = Vector3()
 
@@ -47,11 +48,11 @@ func _physics_process(delta: float) -> void:
 	if state == State.Move:
 		handleMovement()
 		handleInteract()
-	move_and_slide(velocity)
+	move_and_slide(velocity, Vector3.UP)
 
 func fall(delta: float):
 	if not is_on_floor():
-		velocity += GRAVITY * delta
+		velocity += Gravity * delta
 	
 func handleRotation(event: InputEvent):
 	if event is InputEventMouseMotion:
@@ -61,16 +62,16 @@ func handleRotation(event: InputEvent):
 
 func handleMovement():
 	if Input.is_action_just_pressed("Jump") and is_on_floor():
-		velocity.y = JUMP_VELOCITY
+		velocity.y = JumpVelocity
 	
 	var input_dir := Input.get_vector("MoveLeft", "MoveRight", "MoveForward", "MoveBackward")
 	var direction := (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
 	if direction:
-		velocity.x = direction.x * SPEED
-		velocity.z = direction.z * SPEED
+		velocity.x = direction.x * Speed
+		velocity.z = direction.z * Speed
 	else:
-		velocity.x = move_toward(velocity.x, 0, SPEED)
-		velocity.z = move_toward(velocity.z, 0, SPEED)
+		velocity.x = move_toward(velocity.x, 0, Speed)
+		velocity.z = move_toward(velocity.z, 0, Speed)
 
 func handleInteract():
 	if not raycast.is_colliding():
