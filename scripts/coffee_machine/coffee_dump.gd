@@ -1,16 +1,20 @@
 extends Node
 
-signal addLayer(ingredientType, percent)
-signal addIngredient(ingredientType, deltaPercent)
+signal addLayer(ingredientType, percent, readiness)
+signal addIngredient(ingredientType, deltaPercent, readiness)
 
 onready var newPlayerPos: Spatial = $NewPlayerPos
+export var stovePath: NodePath
+onready var stove := get_node(stovePath)
 
 var storedCallerPos: Vector3
-
 var cup: Coffee.Cup
 
 func _ready():
 	connect("addLayer", self, "onAddLayer")
+	yield(stove, "ready")
+	for cezvePath in stove.cezves:
+		stove.get_node(cezvePath).connect("usedCoffee", self, "onUsedCoffee")
 
 func connectToDialog(caller: Object):
 	caller.connect("DialogStart", self, "movePlayerAway")
@@ -20,22 +24,25 @@ func disconnectToDialog(caller: Object):
 	caller.disconnect("DialogStart", self, "movePlayerAway")
 	caller.disconnect("DialogStop", self, "bringPlayerBack")
 
-func onAddLayer(ingredient: Coffee.Ingredient, percent: float):
-	addLayer(ingredient, percent)
+func onAddLayer(ingredient: Coffee.Ingredient, percent: float, readiness: float):
+	addLayer(ingredient, percent, readiness)
 	printDebug()
 
-func addLayer(ingredient: Coffee.Ingredient, percent: float):
+func onUsedCoffee(percentDelta: float, readiness: float):
+	emit_signal("addIngredient", Coffee.Ingredient.new(Coffee.IngredientType.Coffee), percentDelta, readiness)
+
+func addLayer(ingredient: Coffee.Ingredient, percent: float, readiness: float):
 	# TODO: ADD SIGNAL when percent OVERFLOWS
 	if (percent == 0) or (cup == null):
 		return
 	
 	if cup.Layers.size() == 0:
-		var newLayer := Coffee.Layer.new(ingredient.type, percent)
+		var newLayer := Coffee.Layer.new(ingredient.type, percent, readiness)
 		cup.Layers.append(newLayer)
-	elif cup.Layers.back().type == ingredient.type:
+	elif cup.Layers.back().type == ingredient.type and cup.Layers.back().readiness == readiness:
 		cup.Layers[cup.Layers.size()-1].percent += percent
 	else:
-		var newLayer := Coffee.Layer.new(ingredient.type, percent)
+		var newLayer := Coffee.Layer.new(ingredient.type, percent, readiness)
 		cup.Layers.append(newLayer)
 
 func printDebug():

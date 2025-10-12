@@ -22,10 +22,12 @@ class Ingredient extends Node:
 class Layer extends Node:
 	var type # WARNING: ONLY IngredientType EXPECTED
 	var percent: float
+	var readiness: float
 	
-	func _init(type, percent: float):
+	func _init(type, percent: float, readiness: float):
 		self.type = type
 		self.percent = percent
+		self.readiness = readiness
 
 class Cup extends Node:
 	var size # WARNING: ONLY CupSize EXPECTED

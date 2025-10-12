@@ -1,17 +1,18 @@
 extends StaticBody
 
-# TODO: get rid of code duplication (look_at.gd)
 
 onready var camera: Camera = $"../Camera"
-onready var machine: Spatial = $".."
-onready var cupUI: VBoxContainer = $"../Cup"
+onready var stove: Spatial = $".."
 
 var onInteraction := false
 var caller: Object
 
 func InteractWith(caller: Object):
-	cupUI.connectToDialog(caller)
-	machine.connectToDialog(caller)
+	for cezvePath in stove.cezves:
+		var cezve := stove.get_node(cezvePath as NodePath)
+		cezve.get_node("CoffeeAmount").connectToDialog(caller)
+		cezve.get_node("Readiness").connectToDialog(caller)
+		cezve.get_node("FillAction").connectToDialog(caller)
 	
 	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 	caller.emit_signal("DialogStart", self)
@@ -22,24 +23,28 @@ func InteractWith(caller: Object):
 
 
 func _process(_delta: float):
+	pass
+
+func _unhandled_input(event: InputEvent):
 	if not onInteraction:
 		return
 	if Input.is_action_just_pressed("Interact"):
 		self.caller.emit_signal("DialogStop", self)
 		self.caller.camera.make_current()
-		
-		cupUI.disconnectToDialog(caller)
-		machine.disconnectToDialog(caller)
-		
+
+		for cezvePath in stove.cezves:
+			var cezve := stove.get_node(cezvePath as NodePath)
+			cezve.get_node("CoffeeAmount").disconnectToDialog(caller)
+			cezve.get_node("Readiness").connectToDialog(caller)
+			cezve.get_node("FillAction").connectToDialog(caller)
+
 		setOffInteraction()
+		get_viewport().set_input_as_handled()
 
 func setOnInteraction(caller: Object):
 	self.caller = caller
 	onInteraction = true
-	if Hand.CarriedItem is Coffee.Cup:
-		machine.cup = Hand.CarriedItem as Coffee.Cup
 
 func setOffInteraction():
 	onInteraction = false
 	self.caller = null
-	machine.cup = null

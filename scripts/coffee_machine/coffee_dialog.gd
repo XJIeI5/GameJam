@@ -1,19 +1,21 @@
 extends StaticBody
 
+# TODO: get rid of code duplication (look_at.gd)
 
 onready var camera: Camera = $"../Camera"
-# WARNING: ONLY []NodePath EXPECTED
-export(Array) var Cezves = []
+onready var machine: Spatial = $".."
+onready var cupUI: VBoxContainer = $"../Cup"
+onready var cezveLink1UI := $"../Link1"
+onready var cezveLink2UI := $"../Link2"
 
 var onInteraction := false
 var caller: Object
 
 func InteractWith(caller: Object):
-	for _cezve in Cezves:
-		var cezve := get_node(_cezve as NodePath)
-		cezve.get_node("CoffeeAmount").connectToDialog(caller)
-		cezve.get_node("Readiness").connectToDialog(caller)
-		cezve.get_node("FillAction").connectToDialog(caller)
+	cupUI.connectToDialog(caller)
+	machine.connectToDialog(caller)
+	cezveLink1UI.connectToDialog(caller)
+	cezveLink2UI.connectToDialog(caller)
 	
 	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 	caller.emit_signal("DialogStart", self)
@@ -24,28 +26,26 @@ func InteractWith(caller: Object):
 
 
 func _process(_delta: float):
-	pass
-
-func _unhandled_input(event: InputEvent):
 	if not onInteraction:
 		return
 	if Input.is_action_just_pressed("Interact"):
 		self.caller.emit_signal("DialogStop", self)
 		self.caller.camera.make_current()
-
-		for _cezve in Cezves:
-			var cezve := get_node(_cezve as NodePath)
-			cezve.get_node("CoffeeAmount").disconnectToDialog(caller)
-			cezve.get_node("Readiness").connectToDialog(caller)
-			cezve.get_node("FillAction").connectToDialog(caller)
-
+		
+		cupUI.disconnectToDialog(caller)
+		machine.disconnectToDialog(caller)
+		cezveLink1UI.disconnectToDialog(caller)
+		cezveLink2UI.disconnectToDialog(caller)
+		
 		setOffInteraction()
-		get_viewport().set_input_as_handled()
 
 func setOnInteraction(caller: Object):
 	self.caller = caller
 	onInteraction = true
+	if Hand.CarriedItem is Coffee.Cup:
+		machine.cup = Hand.CarriedItem as Coffee.Cup
 
 func setOffInteraction():
 	onInteraction = false
 	self.caller = null
+	machine.cup = null

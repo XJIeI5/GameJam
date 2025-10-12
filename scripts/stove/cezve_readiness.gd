@@ -1,7 +1,7 @@
 extends Label3D
 
 onready var collider := $"../../InteractionCollider"
-onready var cezve := $"../Area"
+onready var cezve := $".."
 var onDialog: bool = false
 
 
@@ -11,7 +11,7 @@ func _ready():
 func _process(delta):
 	if not onDialog:
 		return
-	text = "%.0f ml" % cezve.remainingCoffee
+	text = "%.0f%%" % cezve.readiness
 
 func connectToDialog(caller: Object):
 	caller.connect("DialogStart", self, "onDialogStart")

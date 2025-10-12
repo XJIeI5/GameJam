@@ -24,7 +24,7 @@ func disconnectToDialog(caller: Object):
 	caller.disconnect("DialogStart", self, "onDialogStart")
 	caller.disconnect("DialogStop", self, "onDialogStop")
 
-func onIngredientAdd(ingredient: Coffee.Ingredient, deltaPercent: float):
+func onIngredientAdd(ingredient: Coffee.Ingredient, deltaPercent: float, readiness: float):
 	if machine.cup == null:
 		return
 	if lastType == null or ingredient.type != lastType:

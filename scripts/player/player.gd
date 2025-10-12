@@ -46,12 +46,13 @@ func _input(event: InputEvent) -> void:
 func _unhandled_input(event):
 	if state != State.Move:
 		return
-	handleMovement()
 	handleInteract()
 	get_viewport().set_input_as_handled()
 
 func _physics_process(delta: float) -> void:
 	fall(delta)
+	if state == State.Move:
+		handleMovement()
 	move_and_slide(velocity, Vector3.UP)
 
 func fall(delta: float):
